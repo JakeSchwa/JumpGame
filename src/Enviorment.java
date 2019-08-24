@@ -6,7 +6,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Enviorment {
-
+    Ceiling ceiling;
+    Floor floor;
 
 
     Enviorment(){
