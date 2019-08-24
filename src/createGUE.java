@@ -14,11 +14,13 @@ public class createGUE extends JFrame {
         super.setResizable(false);
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.setVisible(true);
+
+
     }
 
     private void startGame(){
-        Enviorment enviorment = new Enviorment();
-        super.add(enviorment);
+        Game game = new Game();
+        super.add(game);
     }
 
 }
