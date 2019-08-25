@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
         Toolkit.getDefaultToolkit().sync();
-        new createGUE();
+        new GUE();
     }
 
 }

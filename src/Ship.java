@@ -20,6 +20,4 @@ public class Ship extends JPanel{
 
     public void right(){ position.x += velX; }
 
-
-
 }
