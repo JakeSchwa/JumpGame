@@ -6,82 +6,56 @@ import java.awt.*;
 import java.util.Random;
 
 public class Ceiling {
-    Polygon shape;
-
+    public Polygon shape;
     Point topLeft;
     Point topRight;
     Point bottomLeft;
     Point bottomRight;
-
-    int [ ] ceilingX;
-    int [ ] ceilingY;
-
     int numberOfPoints;
-
-
-
-
-
     int topBound;
     int bottomBound;
     int leftBound;
     int rightBound;
 
-    int roughness = 20;
+    int[] surfaceX = new int[21];
+    int[] surfaceY = new int[21];
 
-    int[] surfaceX = new int[roughness];
-    int[] surfaceY = new int[roughness];
-
-
-
-
+    int [ ] ceilingX = new int[23];
+    int [ ] ceilingY = new int[23];
     Ceiling(){
         leftBound = 0;
         rightBound = 1000;
         topBound = 0;
-        bottomBound = 500;
-
+        bottomBound = 200;
         topLeft = new Point(0, 0);
         topRight = new Point(1000, 0);
-        bottomLeft = new Point(0,500 );
-        bottomRight = new Point(1000, 500);
+        bottomLeft = new Point(0,100 );
+        bottomRight = new Point(1000, 100);
+        generateSurface();
 
-        int [ ] ceilingX;
-        int [ ] ceilingY;
+        for( int i = 0; i<ceilingX.length; i++){
 
-        int numberOfPoints = 4;
-
-
-        JSONObject test = generateSurface();
-
-        System.out.println(surfaceX.length);
-
-    }
-
-    private JSONObject generateSurface(){
-
-
-        Random random = new Random();
-
-        for(int i = 0; i<surfaceX.length; i++){
-            surfaceY[i] = random.nextInt(bottomBound);
-            surfaceX[i] = i;
-
-
-
+            if(i == 0) {
+                ceilingX[i] = 1000;
+                ceilingY[i] = 0;
+            }else if( i == 1 ){
+                ceilingX[i] = 0;
+                ceilingY[i] = 0;
+            }else if(i>1){
+                ceilingX[i] = surfaceX[i-2];
+                ceilingY[i] = surfaceY[i-2];
+            }
         }
+        shape = new Polygon(ceilingX, ceilingY, 23);
+        System.out.print(shape.xpoints);
 
-        JSONObject surfaceCords = new JSONObject();
-
-        surfaceCords.put("x",surfaceX);
-        surfaceCords.put("y",surfaceY);
-
-        System.out.println(surfaceCords.toString());
-
-
-        return surfaceCords;
     }
 
-
-
+    private void generateSurface(){
+        Random random = new Random();
+        for(int i = 0; i<surfaceX.length; i++){
+            surfaceY[i] = random.nextInt(100) + 50;
+            surfaceX[i] = i * 50;
+        }
+    }
 }

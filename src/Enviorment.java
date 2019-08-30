@@ -12,7 +12,7 @@ public class Enviorment {
 
     Enviorment(){
         ceiling = new Ceiling();
-
+        floor = new Floor();
     }
 
 
