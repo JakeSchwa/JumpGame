@@ -3,23 +3,17 @@ import java.util.Random;
 
 public class Ceiling {
 
-    int numOfPixelsBetweenSurfacePoints = 20;
+    private int numOfPixelsBetweenSurfacePoints = 20;
+    private int lengthOfCeiling = 6000;
+    private int NumberOfPolygonPoints = lengthOfCeiling / numOfPixelsBetweenSurfacePoints + 2;
+    private int numberOfSurfaces = lengthOfCeiling / numOfPixelsBetweenSurfacePoints;
+    private int [] ceilingX = new int[NumberOfPolygonPoints];
+    private int [] ceilingY = new int[NumberOfPolygonPoints];
+    private int[] surfaceX = new int[numberOfSurfaces];
+    private int[] surfaceY = new int[numberOfSurfaces];
+    private Polygon shape;
 
-    int lengthOfCeiling = 6000;
-
-    int NumberOfPolygonPoints = lengthOfCeiling / numOfPixelsBetweenSurfacePoints + 2;
-
-    int numberOfSurfaces = lengthOfCeiling / numOfPixelsBetweenSurfacePoints;
-
-    int [ ] ceilingX = new int[NumberOfPolygonPoints];
-    int [ ] ceilingY = new int[NumberOfPolygonPoints];
-
-    int[] surfaceX = new int[numberOfSurfaces];
-    int[] surfaceY = new int[numberOfSurfaces];
-
-    public Polygon shape;
-
-    Ceiling(){
+     Ceiling(){
         generateCeilingSurface();
         generateCeilingPolygon();
     }
@@ -34,18 +28,22 @@ public class Ceiling {
 
     private void generateCeilingPolygon(){
         for( int i = 0; i<NumberOfPolygonPoints; i++){
-            if(i == 0) {
+            if( i == 0) {
                 ceilingX[i] = 6000;
                 ceilingY[i] = 0;
             }else if( i == 1 ){
                 ceilingX[i] = 0;
                 ceilingY[i] = 0;
-            }else if(i>1){
+            }else if( i>1 ){
                 ceilingX[i] = surfaceX[i-2];
                 ceilingY[i] = surfaceY[i-2];
             }
         }
         updateShape();
+    }
+
+    private void updateShape(){
+        shape = new Polygon(ceilingX, ceilingY, NumberOfPolygonPoints);
     }
 
     public void moveSurface(){
@@ -54,7 +52,9 @@ public class Ceiling {
         }
         updateShape();
     }
-    private void updateShape(){
-        shape = new Polygon(ceilingX, ceilingY, NumberOfPolygonPoints);
+
+    public Polygon getShape(){
+         return shape;
     }
+
 }

@@ -3,21 +3,15 @@ import java.util.Random;
 
 public class Floor {
 
-    int numOfPixelsBetweenSurfacePoints = 20;
-
-    int lengthOfCeiling = 6000;
-
-    int NumberOfPolygonPoints = lengthOfCeiling / numOfPixelsBetweenSurfacePoints + 2;
-
-    int numberOfSurfacePoints = lengthOfCeiling / numOfPixelsBetweenSurfacePoints;
-
-    int [ ] polygonX = new int[NumberOfPolygonPoints];
-    int [ ] polygonY = new int[NumberOfPolygonPoints];
-
-    int[] surfaceX = new int[numberOfSurfacePoints];
-    int[] surfaceY = new int[numberOfSurfacePoints];
-
-    public Polygon shape;
+    private int numOfPixelsBetweenSurfacePoints = 20;
+    private int lengthOfCeiling = 6000;
+    private int NumberOfPolygonPoints = lengthOfCeiling / numOfPixelsBetweenSurfacePoints + 2;
+    private int numberOfSurfacePoints = lengthOfCeiling / numOfPixelsBetweenSurfacePoints;
+    private int [ ] polygonX = new int[NumberOfPolygonPoints];
+    private int [ ] polygonY = new int[NumberOfPolygonPoints];
+    private int[] surfaceX = new int[numberOfSurfacePoints];
+    private int[] surfaceY = new int[numberOfSurfacePoints];
+    private Polygon shape;
 
     Floor(){
         generateCeilingSurface();
@@ -30,6 +24,10 @@ public class Floor {
             surfaceY[i] = random.nextInt(100) + 300;
             surfaceX[i] = i * numOfPixelsBetweenSurfacePoints;
         }
+    }
+
+    public Polygon getShape() {
+        return shape;
     }
 
     private void generateCeilingPolygon(){
