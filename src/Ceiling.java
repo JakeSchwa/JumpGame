@@ -17,11 +17,15 @@ public class Ceiling {
         generateCeilingSurface();
         generateCeilingPolygon();
     }
-
     private void generateCeilingSurface(){
         Random random = new Random();
         for(int i = 0; i<surfaceX.length; i++){
-            surfaceY[i] = random.nextInt(100) + 50;
+            int abnormal = random.nextInt(2);
+            if(abnormal == 0){
+                surfaceY[i] = random.nextInt(100) + 100;
+            }else if(abnormal == 1){
+                surfaceY[i] = random.nextInt(100) + 50;
+            }
             surfaceX[i] = i * numOfPixelsBetweenSurfacePoints;
         }
     }

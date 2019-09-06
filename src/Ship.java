@@ -14,7 +14,7 @@ public class Ship{
     private int velX = 3;
     private int velY = 3;
     private long lastShot;
-    private int fireRate = 500;
+    private int fireRate = 250;
 
     public LinkedList<Bullet> bullets = new LinkedList<>();
 
@@ -82,6 +82,10 @@ public class Ship{
     }
 
     public Point getBottomRightCords(){
-        return new Point(xCords[0], yCords[0]);
+        return new Point(xCords[2], yCords[2]);
+    }
+
+    public Point getBottomLeftCords(){
+        return new Point(xCords[3], yCords[3]);
     }
 }
