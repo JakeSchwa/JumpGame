@@ -1,4 +1,3 @@
-import org.json.JSONObject;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -31,7 +30,7 @@ public class Game  extends JPanel implements ActionListener, KeyListener {
         enviorment.getCeiling().moveSurface();
         enviorment.getFloor().moveSurface();
         g.fillPolygon(ship.getShape());
-        paintBullets(g);
+        bulletActivity(g);
         enemyCollision(g);
         paintEnemys(g);
         g.fillPolygon(enviorment.getCeiling().getShape());
@@ -41,15 +40,20 @@ public class Game  extends JPanel implements ActionListener, KeyListener {
 
     }
 
-    private void paintBullets(Graphics g){
+    private void bulletActivity(Graphics g){
         if(ship.bullets.size() > 0){
             for (Bullet bullet : ship.bullets) {
-                JSONObject JSONbullet = bullet.getBullet();
-                if(JSONbullet.getInt("x") >= 1000 || JSONbullet.getInt("x") <= 0){
-                    ship.bullets.remove(bullet);
-                }
-                g.fillOval(JSONbullet.getInt("x"),JSONbullet.getInt("y"),JSONbullet.getInt("width"),JSONbullet.getInt("height") );
+                bullet.moveBullet();
+                paintBullet(g, bullet);
             }
+        }
+    }
+
+    private void paintBullet(Graphics g, Bullet bullet) throws NullPointerException{
+        if(bullet.getPosition().getX() >= 1000 || bullet.getPosition().getX() <= 0){
+            ship.bullets.remove(bullet);
+        }else {
+            g.fillOval((int) bullet.getPosition().getX(), (int) bullet.getPosition().getY(), bullet.getWidth(), bullet.getHeight());
         }
     }
 

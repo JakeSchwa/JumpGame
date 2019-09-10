@@ -12,17 +12,7 @@ public class Bullet {
         this.position = position;
     }
 
-    public JSONObject getBullet(){
-        moveBullet();
-        JSONObject bulletJSON = new JSONObject();
-        bulletJSON.put("x",position.x);
-        bulletJSON.put("y",position.y);
-        bulletJSON.put("width",width);
-        bulletJSON.put("height",height);
-        return bulletJSON;
-    }
-
-    private void moveBullet() {
+    public void moveBullet() {
         this.position.x += velocity;
     }
 

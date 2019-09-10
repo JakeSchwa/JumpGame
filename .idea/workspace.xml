@@ -28,7 +28,7 @@
   <component name="ProjectId" id="1Psb1jYKT3adyQVEe74anuDBj0o" />
   <component name="PropertiesComponent">
     <property name="findjar.last.used.dir" value="$PROJECT_DIR$" />
-    <property name="last_opened_file_path" value="$USER_HOME$/externalLibs/json-20180813.jar!/" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -77,13 +77,21 @@
     </recent_temporary>
   </component>
   <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
+    <task id="Default" summary="Default task">
       <changelist id="c3213d70-2255-4d5c-8063-ea9ff5633877" name="Default Changelist" comment="" />
       <created>1559420431196</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1559420431196</updated>
+      <updated>1567871432155</updated>
     </task>
+    <task active="true" id="LOCAL-00001" summary="test">
+      <created>1567871425478</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1567871432188</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
 </project>
