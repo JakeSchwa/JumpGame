@@ -15,8 +15,17 @@ public class Ship{
     private int velY = 3;
     private long lastShot;
     private int fireRate = 250;
-
     public LinkedList<Bullet> bullets = new LinkedList<>();
+    public int maxHealth = 100;
+    public int health = 100;
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void heal(int healAmount) {
+        health += healAmount;
+    }
 
     Ship(Point startPosition){
         position = startPosition;
@@ -28,7 +37,6 @@ public class Ship{
         if(now > lastShot + fireRate) {
             lastShot = new Date().getTime();
             bullets.add(new Bullet(new Point(position)));
-
         }
     }
 
@@ -57,20 +65,8 @@ public class Ship{
 
     public void right(){ position.x += velX; }
 
-    public int getHeight() {
-        return height;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
     public int[] getxCords() {
         return xCords;
-    }
-
-    public int[] getyCords() {
-        return yCords;
     }
 
     public Point getTopLeftCords(){

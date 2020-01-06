@@ -8,12 +8,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class Game  extends JPanel implements ActionListener, KeyListener {
-
     Timer time = new Timer(15, this);
     Enviorment enviorment;
     Ship ship;
     private final Set<Integer> movementKeysCurrentlyPressed = new TreeSet<Integer>();
     private final Set<Integer> attackKeysCurrentlyPressed = new TreeSet<Integer>();
+    int points = 0;
 
     Game(){
         time.start();
@@ -26,19 +26,42 @@ public class Game  extends JPanel implements ActionListener, KeyListener {
     }
 
     public void paintComponent(Graphics g){
-        super.paintComponent(g);
-        enviorment.getCeiling().moveSurface();
-        enviorment.getFloor().moveSurface();
-        g.fillPolygon(ship.getShape());
-        bulletActivity(g);
-        enemyCollision(g);
-        paintEnemys(g);
-        g.fillPolygon(enviorment.getCeiling().getShape());
-        g.fillPolygon(enviorment.getFloor().getShape());
-        CollisionCheck();
-        enviorment.checkForNextWave();
+        if(ship.health <=0){
+            super.removeAll();
+            super.updateUI();
+
+        }else {
+            super.paintComponent(g);
+            enviorment.getCeiling().moveSurface();
+            enviorment.getFloor().moveSurface();
+            g.fillPolygon(enviorment.getCeiling().getShape());
+            g.fillPolygon(enviorment.getFloor().getShape());
+            shipHitWall();
+            g.fillPolygon(ship.getShape());
+            bulletActivity(g);
+            enemyCollision(g);
+            coinCollision(g);
+            paintEnemys(g);
+            g.setColor(Color.yellow);
+            pintCoins(g);
+            CollisionCheck();
+            coinCollision();
+            CheckForShipEnemyCollision();
+            enviorment.checkForNextWave();
+            enviorment.checkForCoinSpawn();
+            g.setColor(Color.green);
+            g.drawString(Integer.toString(points), 10, 10);
+            g.setColor(Color.red);
+            g.drawString(Integer.toString((ship.health)), 10, 25);
+            endGame();
+        }
+    }
+
+    private void gameOver(Graphics g){
+        g.drawString("Game Over",100,100);
 
     }
+
 
     private void bulletActivity(Graphics g){
         if(ship.bullets.size() > 0){
@@ -50,10 +73,39 @@ public class Game  extends JPanel implements ActionListener, KeyListener {
     }
 
     private void paintBullet(Graphics g, Bullet bullet) throws NullPointerException{
-        if(bullet.getPosition().getX() >= 1000 || bullet.getPosition().getX() <= 0){
-            ship.bullets.remove(bullet);
-        }else {
-            g.fillOval((int) bullet.getPosition().getX(), (int) bullet.getPosition().getY(), bullet.getWidth(), bullet.getHeight());
+        g.fillOval((int) bullet.getPosition().getX(), (int) bullet.getPosition().getY(), bullet.getWidth(), bullet.getHeight());
+    }
+
+    private void shipHitWall(){
+        if(enviorment.getCeiling().getShape().contains(ship.getTopLeftCords())){
+            ship.down();
+            ship.right();
+            ship.down();
+            ship.right();
+        }
+        if(enviorment.getCeiling().getShape().contains(ship.getTopRightCords())){
+            ship.down();
+            ship.left();
+            ship.down();
+            ship.left();
+        }
+        if(enviorment.getFloor().getShape().contains(ship.getBottomLeftCords())){
+            ship.up();
+            ship.right();
+            ship.up();
+            ship.right();
+        }
+        if(enviorment.getFloor().getShape().contains(ship.getBottomRightCords())){
+            ship.up();
+            ship.left();
+            ship.up();
+            ship.left();
+        }
+        if(ship.getTopRightCords().getX() >= 1001){
+            ship.left();
+        }
+        if(ship.getTopLeftCords().getX() <= -2){
+            ship.right();
         }
     }
 
@@ -65,6 +117,7 @@ public class Game  extends JPanel implements ActionListener, KeyListener {
             boolean bottomLeft = enviorment.getFloor().getShape().contains(enemy.getBottomRightCords());
             boolean rightSide = enemy.getTopRightCords().getX() >= 1000 && enemy.onMap;
             boolean leftside = enemy.getTopLeftCords().getX() <= 0;
+
             if(topLeft && !topRight && !bottomLeft){
                 enemy.changeDirection(4);
             }else if(topRight && !topLeft && !bottomRight){
@@ -85,11 +138,53 @@ public class Game  extends JPanel implements ActionListener, KeyListener {
         }
     }
 
+    private void coinCollision(Graphics g){
+        for(Coin coin : enviorment.coins){
+            boolean topLeft = enviorment.getCeiling().getShape().contains(coin.getTopLeftCords());
+            boolean topRight = enviorment.getCeiling().getShape().contains(coin.getTopRightCords());
+            boolean bottomRight = enviorment.getFloor().getShape().contains(coin.getBottomLeftCords());
+            boolean bottomLeft = enviorment.getFloor().getShape().contains(coin.getBottomRightCords());
+            boolean rightSide = coin.getTopRightCords().getX() >= 1000;
+            boolean leftside = coin.getTopLeftCords().getX() <= 0;
+
+            if(topLeft && !topRight && !bottomLeft){
+                coin.changeDirection(4);
+            }else if(topRight && !topLeft && !bottomRight){
+                coin.changeDirection(2);
+            }else if(bottomRight && !bottomLeft && !topRight){
+                coin.changeDirection(0);
+            }else if(bottomLeft && !bottomRight && !topLeft){
+                coin.changeDirection(6);
+            }else if(topRight && topLeft){
+                coin.changeDirection(3);
+            }else if(topRight && bottomRight || rightSide){
+                coin.changeDirection(1);
+            }else if(bottomLeft && bottomRight){
+                coin.changeDirection(7);
+            }else if(bottomLeft && topLeft){
+                coin.changeDirection(5);
+            }else if(leftside){
+                enviorment.coins.remove(coin);
+            }
+        }
+    }
+
+
+
     private void paintEnemys(Graphics g){
         if(enviorment.enemies.size() > 0){
             for(Enemy enemy : enviorment.enemies){
                 enemy.move();
-                g.fillPolygon(enemy.getEnemy());
+                g.fillPolygon(enemy.getShape());
+            }
+        }
+    }
+
+    private void pintCoins(Graphics g){
+        if(enviorment.coins.size() > 0){
+            for(Coin coin : enviorment.coins){
+                coin.move();
+                g.fillPolygon(coin.getShape());
             }
         }
     }
@@ -100,15 +195,77 @@ public class Game  extends JPanel implements ActionListener, KeyListener {
         bulletCollision();
         if(floorCollision || ceilingCollision){
             System.out.println("collision");
+            ship.health -= 5;
+        }
+    }
+
+    public void endGame(){
+        if(ship.health <= 0){
+
+        }
+    }
+
+    public boolean offTheScreen(Bullet bullet){
+        if (bullet.getPosition().getX() >= 1000 || bullet.getPosition().getX() <= 0){
+            return true;
+        }
+        else return false;
+    }
+
+    public boolean shipAndBulletCollision(Ship ship, Bullet bullet){
+        if(ship.getShape().intersects( bullet.getPosition().x, bullet.getPosition().y, bullet.getWidth(), bullet.getHeight() )){
+            return true;
+        }
+        else return false;
+    }
+
+    public boolean shipCoinCollision(Coin coin){
+        if(ship.getShape().getBounds2D().intersects(coin.getShape().getBounds2D())){
+            return true;
+        }
+        else return false;
+    }
+
+    public void coinCollision(){
+        for(int c = 0; c<enviorment.coins.size(); c++){
+            Coin currentCoin = enviorment.coins.get(c);
+            if(shipCoinCollision(currentCoin)){
+                points += 100;
+                enviorment.coins.remove(c);
+                c--;
+            }
+        }
+    }
+
+    public boolean shipAndEnemeyCollision(Ship enemy){
+        if(ship.getShape().getBounds2D().intersects(enemy.getShape().getBounds2D())){
+            return true;
+        }
+        else return false;
+    }
+
+    public void CheckForShipEnemyCollision(){
+        for(Ship enemy : enviorment.enemies){
+            if(shipAndEnemeyCollision(enemy)){
+                ship.health -= 5;
+            }
         }
     }
 
     public void bulletCollision(){
-        for(Bullet bullet : ship.bullets){
-            for(Enemy enemy : enviorment.enemies){
-                if(enemy.getShape().intersects( bullet.getPosition().x, bullet.getPosition().y, bullet.getWidth(), bullet.getHeight() )){
-                    enviorment.enemies.remove(enemy);
-                    ship.bullets.remove(bullet);
+        for(int b = 0; b <ship.bullets.size(); b++){
+            Bullet currentBullet = ship.bullets.get(b);
+            if(offTheScreen(currentBullet)) {
+                ship.bullets.remove(currentBullet);
+            }
+            for(int e = 0; e< enviorment.enemies.size(); e++){
+                Enemy currentEnemy = enviorment.enemies.get(e);
+                if(shipAndBulletCollision(currentEnemy,currentBullet)){
+                    enviorment.enemies.remove(currentEnemy);
+                    ship.bullets.remove(b);
+                    points += 10;
+                    b--;
+                    e--;
                 }
             }
         }
@@ -120,7 +277,6 @@ public class Game  extends JPanel implements ActionListener, KeyListener {
         if(attackKeysCurrentlyPressed.contains(KeyEvent.VK_SPACE)){
             ship.shoot();
         }
-
         if(movementKeysCurrentlyPressed.contains(KeyEvent.VK_S) && movementKeysCurrentlyPressed.size() == 1){
             ship.down();
         }else if (movementKeysCurrentlyPressed.contains(KeyEvent.VK_W) && movementKeysCurrentlyPressed.size() == 1){
@@ -142,13 +298,11 @@ public class Game  extends JPanel implements ActionListener, KeyListener {
             ship.down();
             ship.left();
         }
-
         repaint();
     }
 
     @Override
     public void keyTyped(KeyEvent keyEvent) {
-
     }
 
     @Override

@@ -1,18 +1,12 @@
 import java.awt.*;
 
 public class Enemy extends Ship {
-
     boolean onMap;
     private int direction = 0;
-
 
     Enemy(Point startPosition){
         super(startPosition);
         onMap = false;
-    }
-
-    public Polygon getEnemy(){
-        return getShape();
     }
 
     public void move(){

@@ -1,8 +1,8 @@
 import javax.swing.JFrame;
 
-public class GUE extends JFrame {
+public class GUI extends JFrame {
 
-    public GUE() {
+    public GUI() {
         this.createWindow();
         this.startGame();
     }

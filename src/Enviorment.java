@@ -6,11 +6,20 @@ public class Enviorment {
     private Ceiling ceiling;
     private Floor floor;
     LinkedList<Enemy> enemies = new LinkedList<Enemy>();
+    LinkedList<Coin> coins = new LinkedList<Coin>();
 
     Enviorment(){
         ceiling = new Ceiling();
         floor = new Floor();
         spawnEnemyWaves();
+    }
+
+    public void spawnCoins(){
+        coins.add(new Coin(new Point(980, 250)));
+    }
+
+    public void checkForCoinSpawn(){
+        if(coins.size() == 0) spawnCoins();
     }
 
     public void spawnEnemyWaves(){
